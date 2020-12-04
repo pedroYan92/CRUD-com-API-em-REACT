@@ -52,6 +52,7 @@ const useStyles = makeStyles((Theme) => ({
 }));
 
 export default function Consultas() {
+  const classes = useStyles();
   const [consultas, setConsultas] = useState<IConsulta[]>([]);
   const history = useHistory();
   const [open, setOpen] = React.useState(false);
@@ -59,7 +60,6 @@ export default function Consultas() {
 
   const handleClickOpen = () => {
     setOpen(true);
-    console.log(id);
   };
 
   const handleClose = () => {
@@ -72,18 +72,8 @@ export default function Consultas() {
 
   async function loadConsultas() {
     const response = await api.get('/Consultas');
-    console.log(response);
     setConsultas(response.data);
   }
-  async function deleteConsulta(id: string) {
-    const response = await api.delete(`/Consultas/id/${id}`);
-    console.log(response);
-
-    setOpen(false);
-    loadConsultas();
-  }
-
-  const classes = useStyles();
 
   function newConsulta() {
     history.push('/cadastro');
@@ -91,6 +81,13 @@ export default function Consultas() {
   // function formatDate(date: Date) {
   //   return moment(date).format('HH:mm[hs]');
   // }
+
+  async function deleteConsulta(id: string) {
+    await api.delete(`/Consultas/id/${id}`);
+
+    setOpen(false);
+    loadConsultas();
+  }
 
   function editConsulta(id: string) {
     history.push(`/edit/${id}`);
